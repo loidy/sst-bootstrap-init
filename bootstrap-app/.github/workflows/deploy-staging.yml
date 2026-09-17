@@ -1,0 +1,52 @@
+name: Deploy staging
+
+on:
+  push:
+    branches: ["staging"]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'eu-central-1' }}
+
+      - run: npm ci --prefer-offline
+
+      - name: Fetch RDS CA bundle
+        run: bash scripts/fetch-rds-ca.sh
+
+      - name: Deploy to staging
+        id: deploy
+        env:
+          AWS_REGION: ${{ vars.AWS_REGION || 'eu-central-1' }}
+        run: |
+          set -euo pipefail
+          npx sst deploy --stage staging --verbose --print-logs
+          url="$(jq -r '.url // empty' .sst/outputs.json)"
+          echo "url=${url}" >> "${GITHUB_OUTPUT}"

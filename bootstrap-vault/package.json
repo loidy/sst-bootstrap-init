@@ -1,0 +1,25 @@
+{
+  "name": "bootstrap-vault",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit",
+    "deploy": "sst deploy",
+    "dev": "sst dev",
+    "env:pull": "tsx scripts/env-pull.ts",
+    "lint": "eslint .",
+    "sst": "sst"
+  },
+  "dependencies": {
+    "sst": "4.16.0"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-ssm": "^3.830.0",
+    "@eslint/js": "^9.29.0",
+    "@types/node": "^24",
+    "eslint": "^9",
+    "tsx": "^4.22.4",
+    "typescript": "^5",
+    "typescript-eslint": "^8.35.1"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "projectName": "acme",
+  "displayName": "Acme",
+  "targetDirectory": "./out/acme",
+  "mode": "quick",
+  "awsRegion": "eu-central-1",
+  "backupReplicaRegion": "eu-west-1",
+  "rootDomain": "acme.example",
+  "reviewStages": false,
+  "gitInit": false,
+  "npmInstall": false,
+  "generateWorkflows": true,
+  "database": {
+    "kind": "aurora-serverless-v2",
+    "name": "acme",
+    "version": "17.4",
+    "encryption": "cmk"
+  },
+  "stages": [
+    {
+      "name": "dev",
+      "productionLevel": false,
+      "az": 2,
+      "nat": "ec2",
+      "bastion": true,
+      "flowLogs": false,
+      "vpcEndpoints": false,
+      "scalingMinAcu": 0,
+      "scalingMaxAcu": 8,
+      "pauseAfter": "30 minutes",
+      "replicas": 0,
+      "proxy": false,
+      "instanceClass": "t4g.micro",
+      "backupRetentionDays": 1,
+      "deletionProtection": false,
+      "finalSnapshot": false,
+      "performanceInsights": false,
+      "offsiteBackups": false,
+      "kmsDeletionWindowDays": 7,
+      "postgresLogRetentionDays": 7
+    },
+    {
+      "name": "staging",
+      "productionLevel": false,
+      "az": 2,
+      "nat": "ec2",
+      "bastion": true,
+      "flowLogs": false,
+      "vpcEndpoints": false,
+      "scalingMinAcu": 0,
+      "scalingMaxAcu": 8,
+      "pauseAfter": "4 hours",
+      "replicas": 0,
+      "proxy": false,
+      "instanceClass": "t4g.micro",
+      "backupRetentionDays": 7,
+      "deletionProtection": false,
+      "finalSnapshot": false,
+      "performanceInsights": false,
+      "offsiteBackups": false,
+      "kmsDeletionWindowDays": 7,
+      "postgresLogRetentionDays": 7
+    },
+    {
+      "name": "production",
+      "productionLevel": true,
+      "az": 3,
+      "nat": "ec2",
+      "bastion": true,
+      "flowLogs": true,
+      "vpcEndpoints": false,
+      "scalingMinAcu": 1,
+      "scalingMaxAcu": 32,
+      "pauseAfter": null,
+      "replicas": 1,
+      "proxy": false,
+      "instanceClass": "t4g.small",
+      "backupRetentionDays": 30,
+      "deletionProtection": true,
+      "finalSnapshot": true,
+      "performanceInsights": true,
+      "offsiteBackups": false,
+      "kmsDeletionWindowDays": 30,
+      "postgresLogRetentionDays": 30
+    }
+  ],
+  "s3": {
+    "bucketPrefix": "acme-files",
+    "versioning": true,
+    "encryption": "cmk",
+    "noncurrentVersionExpirationDays": null,
+    "intelligentTiering": false,
+    "abortIncompleteMultipartDays": 7
+  },
+  "secrets": [
+    {
+      "key": "EXAMPLE_API_KEY",
+      "required": true,
+      "generate": false
+    }
+  ]
+}

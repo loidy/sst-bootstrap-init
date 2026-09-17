@@ -1,0 +1,17 @@
+{
+  "name": "bootstrap-root-project",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "deploy": "sst deploy",
+    "sst": "sst"
+  },
+  "dependencies": {
+    "sst": "4.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "typescript": "^5"
+  }
+}

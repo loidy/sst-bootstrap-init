@@ -1,0 +1,11 @@
+// Multi-file schema: models live in prisma/models/*.prisma, grouped by concern.
+// `prisma.config.ts` points the CLI at the `prisma` directory.
+generator client {
+  provider   = "prisma-client"
+  output     = "../database/generated"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+}

@@ -1,0 +1,464 @@
+/*
+ * The whole design kit: a token layer, a small reset, and one class per
+ * `shared/ui/` primitive. Plain CSS on purpose — no Tailwind, no component
+ * library, no build step beyond the one Next.js already runs.
+ *
+ * Add a primitive by adding its class here and a typed wrapper in `shared/ui/`.
+ * Feature code never writes raw `ui-*` classes; it composes the wrappers.
+ */
+
+:root {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --color-canvas: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-border: #e2e5ea;
+  --color-border-strong: #c9cfd8;
+  --color-text: #14181f;
+  --color-text-muted: #616a78;
+  --color-accent: #2f5bd7;
+  --color-accent-hover: #2749ad;
+  --color-accent-soft: #eaf0fe;
+  --color-danger: #b4232a;
+  --color-danger-soft: #fdecec;
+  --color-success: #1a7a4c;
+  --color-success-soft: #e7f5ee;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --shadow-sm: 0 1px 2px rgb(20 24 31 / 6%);
+  --shadow-md: 0 4px 12px rgb(20 24 31 / 8%);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+}
+
+/* Reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Layout: app shell */
+
+.ui-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.ui-shell__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: var(--space-3) var(--space-5);
+}
+
+.ui-shell__brand {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ui-shell__brand:hover {
+  text-decoration: none;
+}
+
+.ui-shell__nav {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.ui-shell__link {
+  border-radius: var(--radius-md);
+  padding: var(--space-1) var(--space-3);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.ui-shell__link:hover {
+  background: var(--color-canvas);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.ui-shell__link[aria-current="page"] {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+/* The centred content column. Used by the shell's main and by pages outside it. */
+.ui-page {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-5) var(--space-7);
+}
+
+.ui-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Page header */
+
+.ui-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.ui-page-header__eyebrow {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ui-page-header__title {
+  font-size: 26px;
+}
+
+.ui-page-header__description {
+  max-width: 60ch;
+  color: var(--color-text-muted);
+}
+
+/* Card */
+
+.ui-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-card__header {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-5);
+}
+
+.ui-card__title {
+  font-size: 15px;
+}
+
+.ui-card__description {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+.ui-card__body {
+  padding: var(--space-5);
+}
+
+/* Button */
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.ui-button:hover {
+  text-decoration: none;
+}
+
+.ui-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.ui-button--md {
+  padding: 7px var(--space-4);
+}
+
+.ui-button--sm {
+  padding: 3px var(--space-3);
+  font-size: 13px;
+}
+
+.ui-button--primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.ui-button--primary:not(:disabled):hover {
+  background: var(--color-accent-hover);
+}
+
+.ui-button--secondary {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.ui-button--secondary:not(:disabled):hover {
+  background: var(--color-canvas);
+}
+
+.ui-button--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.ui-button--ghost:not(:disabled):hover {
+  background: var(--color-canvas);
+  color: var(--color-text);
+}
+
+.ui-button--danger {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.ui-button--danger:not(:disabled):hover {
+  background: #fbdcdc;
+}
+
+/* Form field */
+
+.ui-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ui-field__label {
+  font-weight: 500;
+}
+
+.ui-field__hint {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.ui-field__error {
+  color: var(--color-danger);
+  font-size: 13px;
+}
+
+.ui-input,
+.ui-textarea,
+.ui-select {
+  width: 100%;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  padding: 7px var(--space-3);
+}
+
+.ui-input[aria-invalid="true"],
+.ui-textarea[aria-invalid="true"],
+.ui-select[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+.ui-textarea {
+  min-height: 96px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* Table */
+
+.ui-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.ui-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ui-table th,
+.ui-table td {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-4);
+  vertical-align: middle;
+}
+
+.ui-table th {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ui-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ui-table tbody tr:hover {
+  background: var(--color-canvas);
+}
+
+.ui-table__actions {
+  width: 1%;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Badge */
+
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 1px var(--space-2);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ui-badge--neutral {
+  background: var(--color-canvas);
+  color: var(--color-text-muted);
+}
+
+.ui-badge--accent {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.ui-badge--success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+/* Alert */
+
+.ui-alert {
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.ui-alert--danger {
+  border-color: #f3c9c9;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.ui-alert--success {
+  border-color: #bfe3d0;
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+.ui-alert__title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Empty state */
+
+.ui-empty {
+  padding: var(--space-7) var(--space-5);
+  text-align: center;
+}
+
+.ui-empty__title {
+  font-size: 15px;
+}
+
+.ui-empty__description {
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
+}
+
+/* Utilities — deliberately few; layout belongs to the component that needs it. */
+
+.ui-muted {
+  color: var(--color-text-muted);
+}
+
+.ui-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}

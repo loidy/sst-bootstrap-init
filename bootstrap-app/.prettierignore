@@ -1,0 +1,10 @@
+.next
+node_modules
+package-lock.json
+coverage
+database/generated
+
+# Written by `npm run openapi:generate`, which owns its formatting. Letting
+# Prettier reformat it too makes the two tools undo each other, and the next
+# regeneration arrives as a large diff that hides the real API change.
+docs/openapi.json

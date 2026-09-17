@@ -1,0 +1,6 @@
+// Enums shared by more than one model live here so no model file owns a type
+// another one has to reach into.
+enum NoteStatus {
+  DRAFT
+  PUBLISHED
+}
