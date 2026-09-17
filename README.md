@@ -2,6 +2,8 @@
 
 Generates a three-repo SST project from the templates in this directory:
 
+![Quick-mode walkthrough: name the project, review the cost summary, generate three SST repos](docs/demo.gif)
+
 | Folder | Responsibility |
 | --- | --- |
 | `bootstrap-app` | Next.js application |
@@ -55,6 +57,8 @@ npm run lint
 npm run typecheck
 npm test
 ```
+
+Regenerate the README demo GIF with `npm run demo:gif` (Python 3, Pillow, ImageMagick).
 
 `npx sst diff` against a real AWS account is a manual last-mile check and needs
 credentials.

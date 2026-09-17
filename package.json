@@ -8,6 +8,7 @@
   },
   "scripts": {
     "init": "tsx scripts/init.ts",
+    "demo:gif": "python3 scripts/demo/render-gif.py",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests"
